@@ -3,21 +3,28 @@
 #constant initialization
 stake=100;
 bet=1;
-
-
 win=1
+goal=$(($stake * 50/100))
+winingCash=$(($stake + $goal))
+losingCash=$(($stake - $goal))
+
 result=$stake
-random=$((RANDOM%2))
 
-#gambling for $1
-if [ $random -eq $win ]
+#Gambling won or lost on 50% of stake
+while [ $result -lt $winingCash -a $result -gt $losingCash ]
+do
+	random=$((RANDOM%2))
+	if [ $random -eq $win ]
+	then
+			result=$(($result + $bet))
+	else
+			result=$(($result - $bet))
+	fi
+done
+
+if [ $result -gt $stake ]
 then
-	echo "Won"
-	result=$(($result + 1))
-	echo "Wining Amount: "$result
+	echo "Won."
 else
-	echo "Lost"
-	result=$(($result - 1))
-	echo "Losing Amount: "$result
+	echo "Lost."
 fi
-
