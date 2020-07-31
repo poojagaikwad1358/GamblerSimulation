@@ -7,24 +7,33 @@ win=1
 goal=$(($stake * 50/100))
 winingCash=$(($stake + $goal))
 losingCash=$(($stake - $goal))
+totalDays=20
 
-result=$stake
+daysResult=0;
 
-#Gambling won or lost on 50% of stake
-while [ $result -lt $winingCash -a $result -gt $losingCash ]
+#calculate win/loss amount of 20 days
+for ((day=1; $day<=$totalDays; day++))
 do
-	random=$((RANDOM%2))
-	if [ $random -eq $win ]
+	result=$stake
+	while [ $result -lt $winingCash -a $result -gt $losingCash ]
+	do
+		random=$((RANDOM%2))
+		if [ $random -eq $win ]
+		then
+				result=$(($result + $bet))
+		else
+				result=$(($result - $bet))
+		fi
+	done
+
+	if [ $result -gt $stake ]
 	then
-			result=$(($result + $bet))
+		echo "Won."
+		daysResult=$(($daysResult + 1))
 	else
-			result=$(($result - $bet))
+		echo "Lost."
+		daysResult=$(($daysResult - 1))
 	fi
 done
 
-if [ $result -gt $stake ]
-then
-	echo "Won."
-else
-	echo "Lost."
-fi
+echo "Amount of 20 days win/lost : " $(($daysResult * 50))
