@@ -6,43 +6,43 @@ declare -A luck
 
 function gambling()
 {
-
 	#constant initialization
-	stake=100;
-	bet=1;
+	STAKE=100;
+	BET=1;
 	win=1;
-	goal=$(($stake * 50/100))
-	winingCash=$(($stake + $goal))
-	losingCash=$(($stake - $goal))
-	totalDays=30
+	GOAL=$(($STAKE * 50/100))
+	WINNING_CASH=$(($STAKE + $GOAL))
+	LOSING_CASH=$(($STAKE - $GOAL))
+	TOTAL_DAYS=30
 
+	#variables
 	monthResult=0;
 	wins=0;
 	loss=0;
 
 	#gambling for win or loss
-	for ((day=1; $day<=$totalDays; day++))
+	for ((day=1; $day<=$TOTAL_DAYS; day++))
 	do
-		result=$stake
-		while [ $result -lt $winingCash -a $result -gt $losingCash ]
+		result=$STAKE
+		while [ $result -lt $WINNING_CASH -a $result -gt $LOSING_CASH ]
 		do
 			random=$((RANDOM%2))
 			if [ $random -eq $win ]
 			then
-					result=$(($result + $bet))
+					result=$(($result + $BET))
 			else
-					result=$(($result - $bet))
+					result=$(($result - $BET))
 			fi
 		done
 
 			#storing value in dictionary
-			if [ $result -gt $stake ]
+			if [ $result -gt $STAKE ]
 			then
-				month["Day_$day"]=$goal
+				month["Day_$day"]=$GOAL
 				monthResult=$(($monthResult + 1))
 				luck["Day_$day"]=$monthResult
 			else
-				month["Day_$day"]=-$goal
+				month["Day_$day"]=-$GOAL
 				monthResult=$(($monthResult - 1))
 				luck["Day_$day"]=$monthResult
 			fi
@@ -63,7 +63,6 @@ function gambling()
 	done
 
 	#Dictionary array to store lucky and unlucky days in dictionary
-
 	luckyDays=0;
 	unluckeyDays=0;
 	declare -a lucky
@@ -84,7 +83,7 @@ function gambling()
 	#calculate win and loss one by one by using key till month ends
 	for key in ${!month[@]};
 	do
-   	if [ ${month[$key]} -ge $goal ]
+   	if [ ${month[$key]} -ge $GOAL ]
    	then
       	wins=$(($wins +50 ))
    	else
@@ -92,7 +91,7 @@ function gambling()
    	fi
 	done
 
-	totalResult=$(($monthResult * $goal))
+	totalResult=$(($monthResult * $GOAL))
 	echo "Amount of month win/loss : " $totalResult
 	echo "Total win: "$wins
 	echo "Total loss: "$loss
